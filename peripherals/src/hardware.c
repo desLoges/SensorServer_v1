@@ -21,35 +21,37 @@ bool process_ext1_data(void) {
 	memcpy(&nrf_message, &bufferin, sizeof(bufferin));
 	bool ret;
 
-	//if (nrf_message.msgType == 1) {
-	memcpy(&ext_measuredData.temp_minus, &nrf_message.temp_minus,
-			sizeof(nrf_message.temp_minus));
+	if (nrf_message.msgType == 1) {
+		memcpy(&ext_measuredData.temp_minus, &nrf_message.temp_minus,
+				sizeof(nrf_message.temp_minus));
 
-	memcpy(&ext_measuredData.ext1_temp, &nrf_message.temperature,
-			sizeof(nrf_message.temperature));
+		memcpy(&ext_measuredData.ext1_temp, &nrf_message.temperature,
+				sizeof(nrf_message.temperature));
 
-	memcpy(&ext_measuredData.ext1_hum, &nrf_message.humidity,
-			sizeof(nrf_message.humidity));
+		memcpy(&ext_measuredData.ext1_hum, &nrf_message.humidity,
+				sizeof(nrf_message.humidity));
 
-	memcpy(&ext_measuredData.ext1_airpressure, &nrf_message.airpressure,
-			sizeof(nrf_message.airpressure));
-	ext_measuredData.ext1_airpressure[5] = ext_measuredData.ext1_airpressure[4];
-	ext_measuredData.ext1_airpressure[4] = '.';
-	ext_measuredData.ext1_airpressure[6] = '\0';
+		memcpy(&ext_measuredData.ext1_airpressure, &nrf_message.airpressure,
+				sizeof(nrf_message.airpressure));
+		ext_measuredData.ext1_airpressure[5] =
+				ext_measuredData.ext1_airpressure[4];
+		ext_measuredData.ext1_airpressure[4] = '.';
+		ext_measuredData.ext1_airpressure[6] = '\0';
 
-	memcpy(&ext_measuredData.ext1_lux, &nrf_message.lux,
-			sizeof(nrf_message.lux));
+		memcpy(&ext_measuredData.ext1_lux, &nrf_message.lux,
+				sizeof(nrf_message.lux));
 
-	memcpy(&ext_measuredData.ext1_rain, &nrf_message.rain,
-			sizeof(nrf_message.rain));
+		memcpy(&ext_measuredData.ext1_rain, &nrf_message.rain,
+				sizeof(nrf_message.rain));
 
-	memcpy(&ext_measuredData.ext1_batt, &nrf_message.outer_batt,
-			sizeof(nrf_message.outer_batt));
-
-	ret = true;
-	//} else {
-	//	ret = false;
-	//}
+		ret = true;
+	} else if(nrf_message.msgType == 2) {
+		memcpy(&ext_measuredData.ext1_batt, &nrf_message.outer_batt,
+						sizeof(nrf_message.outer_batt));
+		ret = true;
+	}else{
+		ret = false;
+	}
 	return ret;
 }
 

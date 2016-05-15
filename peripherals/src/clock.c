@@ -49,7 +49,7 @@
 #include <avr/io.h>
 #include <util/delay.h>
 
-#include "i2c.h"
+#include "I2C.h"
 #include "ds1307.h"
 #include "clock.h"
 #include "uart.h"

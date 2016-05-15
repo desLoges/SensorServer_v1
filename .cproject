@@ -31,7 +31,7 @@
 								<option id="de.innot.avreclipse.compiler.option.debug.level.195221082" name="Generate Debugging Info" superClass="de.innot.avreclipse.compiler.option.debug.level"/>
 								<option id="de.innot.avreclipse.compiler.option.optimize.224776913" name="Optimization Level" superClass="de.innot.avreclipse.compiler.option.optimize" value="de.innot.avreclipse.compiler.optimize.size" valueType="enumerated"/>
 								<option id="de.innot.avreclipse.compiler.option.incpath.849647323" name="Include Paths (-I)" superClass="de.innot.avreclipse.compiler.option.incpath" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;C:\Users\desLoges\Documents\Hardware\AVR\NixieSensors_v1\peripherals/inc&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;C:\Users\desLoges\Documents\GitHub\SensorServer_v1\peripherals\inc&quot;"/>
 								</option>
 								<option id="de.innot.avreclipse.compiler.option.def.1197541675" name="Define Syms (-D)" superClass="de.innot.avreclipse.compiler.option.def"/>
 								<inputType id="de.innot.avreclipse.compiler.winavr.input.704600805" name="C Source Files" superClass="de.innot.avreclipse.compiler.winavr.input"/>

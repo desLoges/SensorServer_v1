@@ -59,7 +59,7 @@ extern uint8_t bufferin[NRF24L01_PAYLOAD];
 #define WEB_UPDATE_LIMIT				40//20 - cca 1 min
 #define LCD_SHUTDOWN_LIMIT				20
 //define debug print enable or disable on uart
-#define DEBUGENABLED 1
+#define DEBUGENABLED 					(0)
 
 #define STROUT_PR_NAME 			"\r\n\nNixieSensors_v1"
 #define STROUT_NEW_LINE 		"\n"
@@ -186,9 +186,9 @@ typedef struct {
 } Usart_Message_deb_t;
 
 typedef struct {
-	//char devID; //ID workstation - 1B
-	//char msgType;
-	char seqNum; //packet number - 1B
+	char devID; //ID workstation - 1B
+	char msgType;
+	uint8_t seqNum; //packet number - 1B
 	char temp_minus;
 	char temperature[4]; //temperature value - 3B
 	char humidity[4]; //humidity value - 3B
