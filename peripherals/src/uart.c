@@ -37,7 +37,7 @@ void init_USART_DEB(uint16_t ubrr) {
 	UBRR1L = (uint8_t) ubrr;
 
 	/* Enable receiver and transmitter */UCSR1B =  (1 << RXEN1)
-			| (1 << RXCIE1);// | (1 << TXEN1); //|(1<<TXCIE1); (1 << TXEN1) |
+			| (1 << RXCIE1)| (1 << TXEN1);// | (1 << TXEN1); //|(1<<TXCIE1); (1 << TXEN1) |
 
 	/* Set frame format: Async, Parity-Disabled, 1 Stop bit, 8 data bits */
 	UCSR1C = (1 << UCSZ10) | (1 << UCSZ11);

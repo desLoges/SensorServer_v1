@@ -165,6 +165,15 @@ int main(void) {
 
 	if (wifi_connect()) {
 		LCD_verticalScroll("...OK");
+		LCD_verticalScroll("Time Syncing...");
+		if (get_internetTime(true)) {
+			usart_printf("\nTime Synced> ");
+			LCD_verticalScroll("...OK"); //lcd_printf("%s", "OK");
+		} else {
+			usart_printf("\nTime Sync ERROR!");
+			LCD_verticalScroll("...ERROR"); //lcd_printf("%s", "ERROR");
+			LED_RED_ON;
+		}
 	} else {
 		LCD_verticalScroll("...Error");
 		loc_measuredData.wifiErr++;
@@ -244,16 +253,18 @@ int main(void) {
 		usart_printf("\nSERVICE MODE");
 		servoce_mode = true;
 
-		lcd_gotoxy(0, 1);
-		lcd_printf("%s", "Time Syncing...");
-		if (get_internetTime(true)) {
-			usart_printf("\nTime Synced> ");
-			lcd_printf("%s", "OK");
-		} else {
-			usart_printf("\nTime Sync ERROR!");
-			lcd_printf("%s", "ERROR");
-			LED_RED_ON;
-		}
+		init_USART_DEB(MYUBRR_DEB);
+		usart_printf("\nMCUCSR:%d ", MCUCSR);
+//		lcd_gotoxy(0, 1);
+//		lcd_printf("%s", "Time Syncing...");
+//		if (get_internetTime(true)) {
+//			usart_printf("\nTime Synced> ");
+//			lcd_printf("%s", "OK");
+//		} else {
+//			usart_printf("\nTime Sync ERROR!");
+//			lcd_printf("%s", "ERROR");
+//			LED_RED_ON;
+//		}
 
 		while (1) {
 			if (wasrx_uart_deb) {
@@ -429,11 +440,9 @@ int main(void) {
 #if PRINT_STATES==1
 				usart_printf("\nWEB");
 #endif
-				if(web_update(ext1_is_active)){
-					periodicTasks = REFRESHRATE_WAIT;
-				}else{
-					periodicTasks = WEB_UPDATE;
-				}
+				web_update(ext1_is_active);
+				periodicTasks = REFRESHRATE_WAIT;
+
 				break;
 
 			case MEASURE:

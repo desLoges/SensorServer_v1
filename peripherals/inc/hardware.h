@@ -195,10 +195,16 @@ typedef struct {
 	char airpressure[6];
 	char lux[5];
 	char rain[4];
-	char outer_batt[5];
-} nrf_message_t;
-nrf_message_t nrf_message;
+} nrf_sensor_message_t;
+nrf_sensor_message_t nrf_sensor_message;
 
+typedef struct {
+	char devID; //ID workstation - 1B
+	char msgType;
+	uint8_t seqNum; //packet number - 1B
+	char outer_batt[5];
+} nrf_sys_message_t;
+nrf_sys_message_t nrf_sys_message;
 
 typedef struct {
 	uint8_t hours;

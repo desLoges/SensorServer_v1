@@ -86,13 +86,13 @@ bool ClockInit() {
 	//Clear CH Bit
 	temp &= (~(1 << CH));
 
-	if (!DS1307Write(0x00, temp))
-		return 0;
-	usart_printf("write");
-	//Set 12 Hour Mode
+//	if (!DS1307Write(0x00, temp))
+//		return 0;
+//	usart_printf("write");
+//	//Set 12 Hour Mode
+
 	if (!DS1307Read(0x02, &temp))
 		return 0;
-
 	//Set 12Hour BIT
 	temp |= (0b00000000);
 
@@ -171,7 +171,7 @@ uint8_t GetHour() {
 	//Read the Hour Register
 	DS1307Read(0x02, &temp);
 	//hr = (((temp & 0b01000000) >> 4) * 10) + (temp & 0b00011111);
-	hr = ((temp & 0x0F) + ((temp & 0x20) >> 4) * 10);
+	hr = ((temp & 0x0F) + ((temp & 0x30) >> 4) * 10);
 
 	return hr;
 
@@ -359,7 +359,7 @@ bool SetHour(uint8_t hr) {
 
 	uint8_t temp, result;
 
-	temp = ((((hr / 10) << 4) & 0x20) | (hr % 10));
+	temp = ((((hr / 10) << 4) & 0x30) | (hr % 10));
 	result = DS1307Write(0x02, temp);
 
 	return result;
