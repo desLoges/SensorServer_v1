@@ -11129,8 +11129,8 @@ int main(void) {
     4060:	80 e0       	ldi	r24, 0x00	; 0
     4062:	0e 94 c0 15 	call	0x2b80	; 0x2b80 <nixie_suppy>
 					RGB_light_correction = RGB_MIN_DIV;
-					LCD_light_level = 100;
-    4066:	84 e6       	ldi	r24, 0x64	; 100
+					LCD_light_level = 70;
+    4066:	86 e4       	ldi	r24, 0x46	; 70
     4068:	80 93 18 07 	sts	0x0718, r24
     406c:	26 e0       	ldi	r18, 0x06	; 6
     406e:	b2 2e       	mov	r11, r18

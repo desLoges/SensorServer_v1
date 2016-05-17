@@ -492,7 +492,7 @@ int main(void) {
 				if (loc_measuredData.ldr <= NIXIE_SUP_THR_0) {
 					nixie_suppy(0);
 					RGB_light_correction = RGB_MIN_DIV;
-					LCD_light_level = 100;
+					LCD_light_level = 70;
 				} else if (loc_measuredData.ldr < NIXIE_SUP_THR_1) {
 					nixie_suppy(1);
 					RGB_light_correction = RGB_MAX_DIV;
