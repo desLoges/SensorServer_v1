@@ -100,13 +100,13 @@ extern uint8_t bufferin[NRF24L01_PAYLOAD];
 #define LED_RED_OFF 				PORTF &= ~(1<<LED_RED)
 #define LED_RED_TOGGLE 				PORTF ^= (1<<LED_RED)
 
-#define DISP_BACKLIGHT 				PINB4
-#define DISP_BACKLIGHT_ON 			PORTB |= (1<<DISP_BACKLIGHT)
-#define DISP_BACKLIGHT_OFF 			PORTB &= ~(1<<DISP_BACKLIGHT)
+#define DISP_BACKLIGHT_PIN 			PINB4
+#define DISP_BACKLIGHT				OCR0//PORTB |= (1<<DISP_BACKLIGHT)
+//#define DISP_BACKLIGHT_OFF 			OCR0 //PORTB &= ~(1<<DISP_BACKLIGHT)
 
-#define PANEL_LED 					PINE3
-#define PANEL_LED_ON 				PORTE |= (1<<PANEL_LED)
-#define PANEL_LED_OFF 				PORTE &= ~(1<<PANEL_LED)
+//#define PANEL_LED 					PINE3
+//#define PANEL_LED_ON 				PORTE |= (1<<PANEL_LED)
+//#define PANEL_LED_OFF 				PORTE &= ~(1<<PANEL_LED)
 
 #define PIR_PIN						PF2
 #define PIR_PORT					PORTF
@@ -237,6 +237,8 @@ actTime_t actTime;
 void process_uartin(void);
 extern void init_IO(void);
 void timers_init(void);
+void timers_rgb_init(void);
+void timers_lcdlight_init(void);
 extern void init_ADC(void);
 extern uint16_t Read_ADC(uint8_t channel);
 void lcd_printf(const char *fmt, ...);

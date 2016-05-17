@@ -31,7 +31,8 @@ bool process_ext1_data(void) {
 		memcpy(&ext_measuredData.ext1_hum, &nrf_sensor_message.humidity,
 				sizeof(nrf_sensor_message.humidity));
 
-		memcpy(&ext_measuredData.ext1_airpressure, &nrf_sensor_message.airpressure,
+		memcpy(&ext_measuredData.ext1_airpressure,
+				&nrf_sensor_message.airpressure,
 				sizeof(nrf_sensor_message.airpressure));
 		ext_measuredData.ext1_airpressure[5] =
 				ext_measuredData.ext1_airpressure[4];
@@ -47,16 +48,16 @@ bool process_ext1_data(void) {
 		usart_printf("\nMSG type 1");
 
 		ret = true;
-	} else if(nrf_sensor_message.msgType == 2) {
+	} else if (nrf_sensor_message.msgType == 2) {
 		memcpy(&nrf_sys_message, &bufferin, sizeof(bufferin));
 
 		memcpy(&ext_measuredData.ext1_batt, &nrf_sys_message.outer_batt,
-						sizeof(nrf_sys_message.outer_batt));
+				sizeof(nrf_sys_message.outer_batt));
 
 		usart_printf("\nMSG type 2");
 
 		ret = true;
-	}else{
+	} else {
 		ret = false;
 	}
 	return ret;
@@ -125,7 +126,7 @@ void init_IO() {
 	DDRA |= (1 << LED_DEB); //set as output
 	DDRE |= (1 << LED_STB); //| (1 << PANEL_LED);
 	DDRB |= (1 << NIXIE_LED_RED) | (1 << NIXIE_LED_GREEN)
-			| (1 << NIXIE_LED_BLUE) | (1 << DISP_BACKLIGHT);
+			| (1 << NIXIE_LED_BLUE) | (1 << DISP_BACKLIGHT_PIN);
 	DDRD |= (1 << NIXIE_SUPPLY_A) | (1 << NIXIE_SUPPLY_B);
 	DDRF |= (1 << WIFI_RESET_PIN) | (1 << LED_RED) | (1 << LED_YELLOW);
 	//WIFI_DISABLE;
@@ -140,12 +141,16 @@ void timers_init(void) {
 	TCCR3A |= (1 << WGM31) | (1 << WGM30) | (1 << COM3B1);
 	TCCR3B |= (1 << WGM32) | (1 << CS32); //|(1<<CS31);
 
+}
+
+void timers_rgb_init(void) {
 	TCCR1A |= (1 << WGM10) | (1 << COM1A1) | (1 << COM1B1) | (1 << COM1C1);
 	TCCR1B |= (1 << WGM12) | (1 << CS11); //|(1<<CS31);
+}
 
-	TCCR0 |= (1 << CS00) | (1 << CS02);
-	// initialize counter
-	TCNT0 = 0;
+void timers_lcdlight_init(void) {
+	TCCR0 |= (1 << CS00) | (1 << WGM01) | (1 << WGM00)
+			| (1 << COM01);
 }
 
 void lcd_printf(const char *fmt, ...) {

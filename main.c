@@ -42,6 +42,7 @@ volatile bool was_pir_int = false;
 volatile bool was_sysctrl_int = false;
 volatile bool was_nrf_int = false;
 volatile bool servoce_mode = false;
+volatile uint8_t LCD_light_level = 255;
 
 //char d[5] = { '1', '2', '3', '4', '\0' };
 //////////////////////////////////////////////////////////////////////////
@@ -72,6 +73,7 @@ int main(void) {
 	loc_measuredData.wifiErr = 0;
 	loc_measuredData.NRFErr = 0;
 	uint8_t RGB_light_correction = RGB_MAX_DIV;
+
 	//struct rtc_time rtc;
 
 	//IO
@@ -103,15 +105,15 @@ int main(void) {
 	init_USART_DEB(MYUBRR_DEB);
 	usart_printf("\nMCUCSR:%d ", MCUCSR);
 	if (MCUCSR & (1 << PORF))
-		usart_printf("POR");
+	usart_printf("POR");
 	if (MCUCSR & (1 << EXTRF))
-		usart_printf("ERST");
+	usart_printf("ERST");
 	if (MCUCSR & (1 << BORF))
-		usart_printf("BOD");
+	usart_printf("BOD");
 	if (MCUCSR & (1 << WDRF))
-		usart_printf("WDOG");
+	usart_printf("WDOG");
 	if (MCUCSR & (1 << JTRF))
-		usart_printf("JTAG");
+	usart_printf("JTAG");
 
 	MCUCSR = 0;
 
@@ -125,7 +127,8 @@ int main(void) {
 	lcd_home(); //set LCD cursor to default position
 	lcd_gotoxy(3, 0);
 	lcd_printf("System Start:");
-	DISP_BACKLIGHT_ON;
+	timers_lcdlight_init();
+	DISP_BACKLIGHT = LCD_light_level;
 	usart_printf("\nLCD...");
 	LCD_verticalScroll("LCD done");
 
@@ -140,6 +143,15 @@ int main(void) {
 	_delay_ms(300);
 	LED_RED_OFF;
 	LED_YELLOW_OFF;
+
+	timers_rgb_init();
+	set_nixie_rgb(255, 0, 0);
+	_delay_ms(200);
+	set_nixie_rgb(0, 255, 0);
+	_delay_ms(200);
+	set_nixie_rgb(0, 0, 255);
+	_delay_ms(200);
+	set_nixie_rgb(0, 0, 0);
 
 	//
 	// RTC
@@ -205,14 +217,6 @@ int main(void) {
 	//NIXIE
 	//
 	config_io_nixie();
-
-	set_nixie_rgb(255, 0, 0);
-	_delay_ms(200);
-	set_nixie_rgb(0, 255, 0);
-	_delay_ms(200);
-	set_nixie_rgb(0, 0, 255);
-	_delay_ms(200);
-	set_nixie_rgb(0, 0, 0);
 
 	//
 	// NRF radio
@@ -376,7 +380,7 @@ int main(void) {
 					if (PIR_PINNAME & (1 << PIR_PIN)) {
 						PIR_active = true;
 						usart_printf("\nPIR act");
-						DISP_BACKLIGHT_ON;
+						DISP_BACKLIGHT = LCD_light_level;
 						motion_enable_lcd = true;
 						//
 						//	No actual motion detected
@@ -390,7 +394,7 @@ int main(void) {
 							//if no motion was detected in defined time
 							if (motion_enable_lcd_cnt > LCD_SHUTDOWN_LIMIT) {
 								motion_enable_lcd = false;
-								DISP_BACKLIGHT_OFF;
+								DISP_BACKLIGHT = 0;
 							}
 
 							// if no motion detected
@@ -488,18 +492,25 @@ int main(void) {
 				if (loc_measuredData.ldr <= NIXIE_SUP_THR_0) {
 					nixie_suppy(0);
 					RGB_light_correction = RGB_MIN_DIV;
+					LCD_light_level = 100;
 				} else if (loc_measuredData.ldr < NIXIE_SUP_THR_1) {
 					nixie_suppy(1);
-					RGB_light_correction = RGB_MID_DIV;
+					RGB_light_correction = RGB_MAX_DIV;
+					LCD_light_level = 190;
 				} else if (loc_measuredData.ldr < NIXIE_SUP_THR_2) {
 					nixie_suppy(2);
 					RGB_light_correction = RGB_MAX_DIV;
+					LCD_light_level = 220;
 				} else {
 					nixie_suppy(3);
 					RGB_light_correction = RGB_MAX_DIV;
+					LCD_light_level = 255;
 				}
 
 				usart_printf("\nRGB corr: %d", RGB_light_correction);
+
+				if (motion_enable_lcd)
+					DISP_BACKLIGHT = LCD_light_level;
 
 				if (atoi(ext_measuredData.ext1_batt) < MIN_BATT_LEVEL
 						&& atoi(ext_measuredData.ext1_batt) > 1) {
@@ -805,7 +816,7 @@ ISR(INT1_vect) {
 	cli();
 	was_pir_int = true;
 	usart_printf("\nPIR INT");
-	DISP_BACKLIGHT_ON;
+	DISP_BACKLIGHT = LCD_light_level;
 	sei();
 }
 
