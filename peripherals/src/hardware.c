@@ -744,7 +744,7 @@ bool wifi_connect(void) {
 
 	bool ret = false;
 	char cmd[50];
-	strcpy(cmd, "AT+CWJAP=\"PalHome_1\",\"gerbicic\""); //make this command: AT+CPISTART="TCP","146.227.57.195",80
+	strcpy(cmd, "AT+CWJAP=\"WifiNTW\",\"WifiPass\""); //make this command: AT+CPISTART="TCP","146.227.57.195",80
 	sendATCOM(cmd);
 	//usart_printf("\n%s", cmd);
 

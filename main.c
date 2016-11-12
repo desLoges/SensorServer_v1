@@ -2,7 +2,7 @@
  * main.c
  *
  * Created: 2013.07.15. 0:26:17
- *  Author: desLoges
+ *  Author: Pal Tamas - desLoges
  */
 #define F_CPU 16000000UL
 #include <avr/io.h>
@@ -44,9 +44,7 @@ volatile bool was_nrf_int = false;
 volatile bool servoce_mode = false;
 volatile uint8_t LCD_light_level = 255;
 
-//char d[5] = { '1', '2', '3', '4', '\0' };
 //////////////////////////////////////////////////////////////////////////
-
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
 int main(void) {
@@ -95,12 +93,7 @@ int main(void) {
 	//USART
 	init_USART_ETH(MYUBRR_ETH);
 
-	//wifiEnable(false);
 #if DEBUGENABLED==1
-
-//	if(PIND & (1<<PD2)){
-//
-//	}
 
 	init_USART_DEB(MYUBRR_DEB);
 	usart_printf("\nMCUCSR:%d ", MCUCSR);
@@ -765,13 +758,6 @@ ISR(USART1_RX_vect) {
 
 ISR(USART0_RX_vect) {
 	cli();
-//////	DEB_LED_ON;
-//	char data_eth = USART_receive_ETH();
-////if(data==USART_EOS_CHAR_DEB) data = '\0';
-//	rx_buffer_eth[eth_i] = data_eth;
-//	if (data_eth == USART_EOF_CHAR_ETH)
-//		wasrx_uart_eth = 1;
-//	eth_i++;
 
 	char last_rx_byte = USART_receive_ETH();
 	//if (last_rx_byte) {
@@ -788,11 +774,7 @@ ISR(USART0_RX_vect) {
 
 	rx_buffer_eth[eth_i] = last_rx_byte;
 	eth_i++;
-	//}
 
-	//if (servoce_mode) {
-	//	USART_Transmit_DEB(USART_receive_ETH());
-	//}
 	sei();
 }
 
